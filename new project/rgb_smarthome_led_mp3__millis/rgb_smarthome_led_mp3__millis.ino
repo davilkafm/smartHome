@@ -4,7 +4,7 @@
 
 #define RGB_1_RED_PIN     2
 #define RGB_1_GREEN_PIN   3
-#define RGB_1_BLUE_PIN    4
+#define RGB_1_BLUE_PIN    6
 
 #define POT_PIN           A8
 
@@ -13,20 +13,20 @@
 
 int RED_BLINK  [] =
 {
-  LOW, HIGH, HIGH, LOW, HIGH, LOW, LOW
+  LOW, HIGH, HIGH, LOW, HIGH, LOW
 };
-
 int GREEN_BLINK[] =
 {
-  HIGH, LOW, HIGH, LOW, LOW, HIGH, LOW
+  HIGH, LOW, HIGH, LOW, LOW, HIGH
 };
 
 int BLUE_BLINK [] =
 {
-  HIGH, HIGH, LOW, HIGH, LOW, LOW, LOW
+  HIGH, HIGH, LOW, HIGH, LOW, LOW
 };
 
-int potVal = 0;
+long previousTime = 0;
+long interval     = 300;
 
 void setup() 
 {
@@ -39,24 +39,39 @@ void setup()
  Serial.begin(9600);
  
  mp3_set_serial (Serial);    //set Serial for DFPlayer-mini mp3 module 
- delay (100);
  mp3_set_volume (15);
- delay (100);
  mp3_play(); // запускаем трек 
 }
 
 void loop() 
 {
+ int potVal = 0; 
+ 
  potVal = analogRead(POT_PIN) / (MAX_ADC / MAX_VOLUME);
 
  mp3_set_volume(potVal);
-  
- for (int i = 0; i!=8; i++)
+
+ flashRGB();
+}
+
+
+
+void flashRGB()
+{
+ for (int i = 0; i!=7; i++)
  { 
-  digitalWrite(RGB_1_RED_PIN,   RED_BLINK  [i]);
-  digitalWrite(RGB_1_GREEN_PIN, GREEN_BLINK[i]);
-  digitalWrite(RGB_1_BLUE_PIN,  BLUE_BLINK [i]);
-  
-  delay(300); 
+  unsigned long currentTime = millis();
+
+  if(currentTime - previousTime > interval)
+  {
+    // сохраняем время последнего переключения
+    previousTime = currentTime;
+
+    digitalWrite(RGB_1_RED_PIN,   RED_BLINK  [i]);
+    digitalWrite(RGB_1_GREEN_PIN, GREEN_BLINK[i]);
+    digitalWrite(RGB_1_BLUE_PIN,  BLUE_BLINK [i]);
+  }
  }
 }
+
+
