@@ -27,12 +27,12 @@ int BLUE_BLINK [] =
 };
 */
 
-long previousTime  = 0;
-long interval      = 300;
+long startTime     = 0;
+int  delayPeriod   = 1000;
 
-int ledRGBRedState = 0;
-int ledRGBGreenState = 0;
-int ledRGBBlueState = 0;
+int ledRGBRedState = LOW;
+int ledRGBGreenState = HIGH;
+int ledRGBBlueState = LOW;
 
 void setup() 
 {
@@ -52,16 +52,54 @@ void setup()
 void loop() 
 {
  int potVal = 0; 
+
  
+  
  potVal = analogRead(POT_PIN) / (MAX_ADC / MAX_VOLUME);
 
  mp3_set_volume(potVal);
 
-flashRGB();
+//flashRGB();
 
-}
+ unsigned long currentTime = millis();
+
+ if (currentTime - startTime > delayPeriod)
+ {
+  startTime = currentTime;
+  
+  if (ledRGBRedState == LOW)
+      ledRGBRedState = HIGH;
+    else
+      ledRGBRedState = LOW;
+
+    if (ledRGBGreenState == LOW)
+      ledRGBGreenState = HIGH;
+    else
+      ledRGBGreenState = LOW;
+
+    if (ledRGBBlueState == LOW)
+      ledRGBBlueState = HIGH;
+    else
+      ledRGBBlueState = LOW;
+      
+
+   digitalWrite(RGB_1_RED_PIN,   ledRGBRedState);
+   digitalWrite(RGB_1_GREEN_PIN, ledRGBGreenState);
+   digitalWrite(RGB_1_BLUE_PIN,  ledRGBBlueState);
+ }
+
+  
+ }
+/*
+ ledRGBRedState   = ledRGBRedVal;
+ ledRGBGreenState = ledRGBGreenVal;
+ ledRGBBlueState  = ledRGBBlueVal;
+ */
+ 
 
 
+
+/*
 void flashRGB()
 {
  int ledRGBRedVal   = random(HIGH, LOW);
@@ -100,6 +138,7 @@ void flashRGB()
  ledRGBGreenState = ledRGBGreenVal;
  ledRGBBlueState  = ledRGBBlueVal;
 }
-
+}
+*/
 
 
