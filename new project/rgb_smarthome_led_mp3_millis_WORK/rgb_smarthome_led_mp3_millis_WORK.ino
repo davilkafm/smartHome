@@ -29,6 +29,7 @@ int BLUE_BLINK [] =
 
 long startTime     = 0;
 int  delayPeriod   = 1000;
+int  countTime         = 0;
 
 void setup() 
 {
@@ -61,14 +62,13 @@ void loop()
  {
   startTime = currentTime;
 
-for (int i = 0; i!=8; i++)
- { 
-  digitalWrite(RGB_1_RED_PIN,   RED_BLINK  [i]);
-  digitalWrite(RGB_1_GREEN_PIN, GREEN_BLINK[i]);
-  digitalWrite(RGB_1_BLUE_PIN,  BLUE_BLINK [i]);
+  digitalWrite(RGB_1_RED_PIN,   RED_BLINK  [countTime]);
+  digitalWrite(RGB_1_GREEN_PIN, GREEN_BLINK[countTime]);
+  digitalWrite(RGB_1_BLUE_PIN,  BLUE_BLINK [countTime]);
+ }
+ countTime++;
 
- }
- }
+ if (countTime>=7) countTime = 0;
 }
 
   
