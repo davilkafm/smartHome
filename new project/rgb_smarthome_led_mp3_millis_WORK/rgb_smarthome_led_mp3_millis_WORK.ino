@@ -2,11 +2,11 @@
 #include <SoftwareSerial.h>
 #include <DFPlayer_Mini_Mp3.h>
 
-#define RGB_1_RED_PIN     2
-#define RGB_1_GREEN_PIN   3
-#define RGB_1_BLUE_PIN    6
+#define RGB_1_RED_PIN     22
+#define RGB_1_GREEN_PIN   24
+#define RGB_1_BLUE_PIN    26
 
-#define POT_PIN           A8
+#define POT_PIN           A0
 
 #define MAX_VOLUME        30
 #define MAX_ADC           1024
@@ -29,7 +29,7 @@ int BLUE_BLINK [] =
 
 long startTime     = 0;
 int  delayPeriod   = 1000;
-int  countTime         = 0;
+int  countTime     = 0;
 
 void setup() 
 {
@@ -54,8 +54,10 @@ void loop()
 
  mp3_set_volume(potVal);
 
-//flashRGB();
 
+ flashRGB();
+
+ /*
  unsigned long currentTime = millis();
 
  if (currentTime - startTime > delayPeriod)
@@ -69,6 +71,32 @@ void loop()
  countTime++;
 
  if (countTime>=7) countTime = 0;
+ */
 }
+
+
+
+
+
+void flashRGB()
+{
+ unsigned long currentTime = millis();
+
+ if (currentTime - startTime > delayPeriod)
+ {
+  startTime = currentTime;
+
+  digitalWrite(RGB_1_RED_PIN,   RED_BLINK  [countTime]);
+  digitalWrite(RGB_1_GREEN_PIN, GREEN_BLINK[countTime]);
+  digitalWrite(RGB_1_BLUE_PIN,  BLUE_BLINK [countTime]);
+ }
+ countTime++; 
+
+ if (countTime>=7) countTime = 0;
+}
+
+
+
+
 
   
